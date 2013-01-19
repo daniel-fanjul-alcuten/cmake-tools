@@ -57,7 +57,6 @@ func main() {
 					rule_items[i] <- item
 				}
 			}
-
 			for i := range rules {
 				close(rule_items[i])
 			}

@@ -8,7 +8,6 @@ import (
 	"testing"
 )
 
-// TODO add line number the errors is located in
 var message = "there are tabs"
 
 func TestNoTabsRuleCheck(t *testing.T) {
@@ -51,6 +50,50 @@ func assertChecks(t *testing.T, str string, expected ...string) {
 	}
 	for i < len(expected) {
 		t.Error("Missing error", expected[i], "at", i)
+		i++
+	}
+}
+
+func TestNoTabsRuleFormat(t *testing.T) {
+	assertFormats(t, "#foo", "#foo")
+}
+
+func TestNoTabsRuleFormatWithSpaces(t *testing.T) {
+	assertFormats(t, " #foo", " #foo")
+}
+
+func TestNoTabsRuleFormatWithTabs(t *testing.T) {
+	assertFormats(t, "\t#foo", "  #foo")
+}
+
+func TestNoTabsRuleFormatWithSpacesAndTabs(t *testing.T) {
+	assertFormats(t, " \t#foo", "   #foo")
+}
+
+func assertFormats(t *testing.T, str string, expected string) {
+
+	tokens := make(chan Token, 8)
+	go Lex(str, tokens)
+
+	items := make(chan Item, 4)
+	go Parse(tokens, items)
+
+	formats := make(chan Item, 4)
+	go NoTabsRule{}.Format(items, formats)
+
+	i := 0
+	for item := range formats {
+		if i < 1 {
+			if item.String() != expected {
+				t.Error("Different Item", item.String(), ",", expected, "at", i)
+			}
+		} else {
+			t.Error("Unexpected Item", item.String(), "at", i)
+		}
+		i++
+	}
+	if i < 1 {
+		t.Error("Missing Item", expected, "at", i)
 		i++
 	}
 }

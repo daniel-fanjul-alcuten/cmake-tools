@@ -13,6 +13,22 @@ type Empty struct {
 	Newline *NewLine
 }
 
+func (e Empty) String() string {
+	s := ""
+	if e.Whitabs != nil {
+		for _, t := range e.Whitabs {
+			s += t.String()
+		}
+	}
+	if e.Comment != nil {
+		s += e.Comment.String()
+	}
+	if e.Newline != nil {
+		s += e.Newline.String()
+	}
+	return s
+}
+
 func (e Empty) ItemString() string {
 	s := ""
 	if e.Whitabs != nil {

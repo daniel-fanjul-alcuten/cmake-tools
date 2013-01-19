@@ -5,6 +5,17 @@ import (
 	"testing"
 )
 
+func TestEmptyString(t *testing.T) {
+	comment := Comment("foo")
+	s := Empty{
+		Whitabs: []Token{Whitespace(1), Tab(1), Whitespace(1)},
+		Comment: &comment,
+		Newline: &NewLine{}}.String()
+	if s != " \t #foo\n" {
+		t.Error("Unexpected String()", s)
+	}
+}
+
 func TestEmptyItemString(t *testing.T) {
 	comment := Comment("foo")
 	s := Empty{

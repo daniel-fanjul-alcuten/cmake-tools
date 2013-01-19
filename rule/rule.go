@@ -5,6 +5,7 @@ import (
 )
 
 type Error struct {
+	// TODO add line numbers
 	error
 }
 

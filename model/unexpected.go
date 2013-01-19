@@ -10,6 +10,10 @@ type UnexpectedToken struct {
 	Token Token
 }
 
+func (u UnexpectedToken) String() string {
+	return u.ItemString()
+}
+
 func (u UnexpectedToken) ItemString() string {
 	return fmt.Sprintf("%T(%v)", u, u.Token.TokenString())
 }
